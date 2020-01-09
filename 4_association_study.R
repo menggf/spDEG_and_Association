@@ -158,7 +158,9 @@ have.snp=unique(as.vector(all.gwas$id))
 
 library(biomaRt)
 snpmart = useMart(biomart = "ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
-ann.snp=getBM(attributes = c("refsnp_id", "chr_name", "chrom_start", "chrom_end", "ensembl_gene_stable_id","ensembl_type","consequence_type_tv"),filters = c("snp_filter"),values = have.snp,mart = snpmart)
+ann.snp=getBM(attributes = c("refsnp_id", "chr_name", "chrom_start", "chrom_end", "ensembl_gene_stable_id",
+			     "ensembl_type","consequence_type_tv"),filters = c("snp_filter"),values = have.snp,
+	      		     mart = snpmart)
 results0=cbind(all.gwas, ann.snp[have.snp, c("gene","chr_name","chrom_start","consequence_type_tv")])
 
 
@@ -264,7 +266,8 @@ gwas.hbtrc=mclapply(1:nn, function(y){
   rr1=rr1[order(rr1$P1df, decreasing=F),]
   rr2=rr2[order(rr2$P1df, decreasing=F),]
   rr3=rr3[order(rr3$P1df, decreasing=F),]
-  list(res1=rr1,res2=rr2, res3=rr3, pa=pat.id, tp=tp, pas1=paste(pas1, collapse=","), pas2=paste(pas2, collapse=","), pas3=paste(pas3, collapse=","))
+  list(res1=rr1,res2=rr2, res3=rr3, pa=pat.id, tp=tp, pas1=paste(pas1, collapse=","), pas2=paste(pas2, collapse=","),
+       		pas3=paste(pas3, collapse=","))
 }, mc.preschedule=F, mc.cores=23)
 
 
@@ -279,7 +282,12 @@ for(i in 1:length(gwas.hbtrc) ){
      next()
   sub.res2= gwas.hbtrc[[i]][["res2"]][snp,]
   sub.res3= gwas.hbtrc[[i]][["res3"]][snp,]
-  op=as.data.frame(cbind(id=snp, pid=snp, effB=as.vector(sub.res1$effB), lambda=as.vector(sub.res1$lambda),se=as.vector(sub.res1$se), P1df1=as.vector(sub.res1$P1df),P1df2=as.vector(sub.res2$P1df),P1df3=as.vector(sub.res3$P1df), p.adj=as.vector(sub.res1$p.adj), pa=gwas.hbtrc[[i]][["pa"]], tp=gwas.hbtrc[[i]][["tp"]], n1=length(strsplit(gwas.hbtrc[[i]][["pas1"]],",")[[1]]),n2=length(strsplit(gwas.hbtrc[[i]][["pas2"]],",")[[1]]),n3=length(strsplit(gwas.hbtrc[[i]][["pas3"]],",")[[1]])))
+  op=as.data.frame(cbind(id=snp, pid=snp, effB=as.vector(sub.res1$effB), lambda=as.vector(sub.res1$lambda),
+			 se=as.vector(sub.res1$se), P1df1=as.vector(sub.res1$P1df),P1df2=as.vector(sub.res2$P1df),
+			 P1df3=as.vector(sub.res3$P1df), p.adj=as.vector(sub.res1$p.adj), pa=gwas.hbtrc[[i]][["pa"]], 
+			 tp=gwas.hbtrc[[i]][["tp"]], n1=length(strsplit(gwas.hbtrc[[i]][["pas1"]],",")[[1]]),
+			 n2=length(strsplit(gwas.hbtrc[[i]][["pas2"]],",")[[1]]),
+			 n3=length(strsplit(gwas.hbtrc[[i]][["pas3"]],",")[[1]])))
   outcome=rbind(op, outcome)
 }
 outcome$lambda=as.numeric(as.vector(outcome$lambda))
@@ -288,7 +296,9 @@ have.snp=unique(as.vector(new.outcome$id))
 
 library(biomaRt)
 snpmart = useMart(biomart = "ENSEMBL_MART_SNP", dataset = "hsapiens_snp")
-ann.snp=getBM(attributes = c("refsnp_id", "chr_name", "chrom_start", "chrom_end", "ensembl_gene_stable_id","ensembl_type","consequence_type_tv"),filters = c("snp_filter"),values = have.snp,mart = snpmart)
+ann.snp=getBM(attributes = c("refsnp_id", "chr_name", "chrom_start", "chrom_end", "ensembl_gene_stable_id",
+			     "ensembl_type","consequence_type_tv"),filters = c("snp_filter"),values = have.snp,
+	                      mart = snpmart)
 results=cbind(new.outcome, ann.snp[have.snp, c("gene","chr_name","chrom_start","consequence_type_tv")])
 results=results[order(as.numeric(as.vector(results$P1df1))),]
 
