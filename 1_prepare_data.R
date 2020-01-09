@@ -29,7 +29,3 @@ ge=input@gtdata@snpnames;
 remove.ge=ge[!ge %in% input2@gtdata@snpnames]
 write.table(remove.ge,"remove_snp.txt",row.names=F,col.names=F,quote=F)
 write.table(remove.pa,"remove_patients.txt",row.names=F,col.names=F,quote=F)
-
-
-for(i in 1:22){ convert.snp.ped(pedfile=paste("result/impute2_chr",i,".ped",sep=""),mapfile=paste("result/impute2_chr",i,".map",sep=""), outfile=paste("chr",i,".dat",sep=""))
-}
